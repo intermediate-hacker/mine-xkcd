@@ -23,8 +23,6 @@ Optional arguments:
 
 	--latest (download the latest comic)
 
-	--random (download a random comic)
-
 Examples:
 
 Download comics 1 to 100 into directory "test/":

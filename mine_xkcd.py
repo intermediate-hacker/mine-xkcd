@@ -33,6 +33,7 @@ def open_url(i, use_wget, verbose, max_attempt, attempt = 0):
 
 		url = "https://xkcd.com/"		
 		if i != -1: url = url + str(i) + "/"
+		if i == -2: url = "http://c.xkcd.com/random/comic/"
 
 		if verbose: print "Attempt:", attempt
 		try:
@@ -76,6 +77,8 @@ def extract(path, last, use_wget, verbose, start, max_attempt):
 		down_path = path + "/" + str(i) + ext
 		if i == -1:
 			down_path = path + "/latest_comic.png"
+		elif i == -2:
+			down_path = path + "/random_comic.png"
 
 		if verbose: print "Downloading: ", i, " to ", down_path
 		download_image(img, down_path, use_wget, verbose, max_attempt)
@@ -120,6 +123,9 @@ if __name__ == "__main__":
 		if "--latest" in sys.argv:
 			start = -1
 			end = -1
+		elif "--random" in sys.argv:
+			start = -2
+			end = -2
 		else:
 			end = int(sys.argv[2])
 
