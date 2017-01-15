@@ -1,21 +1,19 @@
 # mine-xkcd
 Python (2.7x) script that downloads all XKCD comics within a given range so you can read them from your hard-drive anytime.
 
-Modules needed:
+*Modules needed*
 
 BeautifulSoup: apt-get install python-bs4
 
-[Optional. If you want to use the "--wget" option.] 
-
-Wget: pip install wget
+[Optional. If you want to use the "--wget" option.] Wget: pip install wget
 
 Useage:
 
-python mine_xkcd.py [path to download] [last_comic_index] 
+*python mine_xkcd.py [path to download] [last_comic_index]*
 
 Optional arguments: --start n (start from the nth comic)
-					--wget (use the wget module for downloading)
-					--verbose (print diagnostic information)
+		    --wget (use the wget module for downloading)
+		    --verbose (print diagnostic information)
 
 Examples:
 
