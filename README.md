@@ -21,6 +21,8 @@ Optional arguments:
 		    
 	--tries n (make n attempts to download file)
 
+	--latest (download the latest comic)
+
 Examples:
 
 Download comics 1 to 100 into directory "test/":
