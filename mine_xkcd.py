@@ -31,16 +31,17 @@ def download_image(img, down_path, use_wget, verbose, max_attempt, attempt=0):
 def open_url(i, use_wget, verbose, max_attempt, attempt = 0):
 		soup = None
 
+		url = "https://xkcd.com/"		
+		if i != -1: url = url + str(i) + "/"
+
 		if verbose: print "Attempt:", attempt
 		try:
 			if use_wget:
-				url = "http://xkcd.com/" + str(i) + "/"
 				index_file = str(i) + ".temp"
 				wget.download(url, index_file)
 				soup = BeautifulSoup(open(index_file))
 				os.remove(index_file)
 			else:
-				url = "https://xkcd.com/" + str(i) + "/"
 				f = urllib2.urlopen(url)
 				soup = BeautifulSoup(f.read())
 		except:
@@ -73,6 +74,8 @@ def extract(path, last, use_wget, verbose, start, max_attempt):
 		if i < 120: ext = ".jpg"
 
 		down_path = path + "/" + str(i) + ext
+		if i == -1:
+			down_path = path + "/latest_comic.png"
 
 		if verbose: print "Downloading: ", i, " to ", down_path
 		download_image(img, down_path, use_wget, verbose, max_attempt)
@@ -87,6 +90,7 @@ if __name__ == "__main__":
 		verbose = False
 		start = 1
 		max_attempt = 3
+		path = sys.argv[1]
 
 		if "--wget" in sys.argv:
 			use_wget = True
@@ -111,6 +115,12 @@ if __name__ == "__main__":
 				start = 1		
 
 		if not os.path.exists(sys.argv[1]):
-			os.makedirs(sys.argv[1])		
+			os.makedirs(sys.argv[1])
 
-		extract(sys.argv[1], int(sys.argv[2]), use_wget, verbose, start, max_attempt)
+		if "--latest" in sys.argv:
+			start = -1
+			end = -1
+		else:
+			end = int(sys.argv[2])
+
+		extract(path, end, use_wget, verbose, start, max_attempt)
