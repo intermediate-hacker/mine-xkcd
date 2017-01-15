@@ -18,7 +18,7 @@ def download_three_times(img, down_path, use_wget, verbose, attempt=0):
 			download_three_times(img, down_path, use_wget, verbose, attempt+1)
 			return
 		else:
-			if verbose: print "Failed."
+			print "Failed."
 			return
 
 	print "Downloaded."
@@ -59,7 +59,7 @@ def extract(path, last, use_wget, verbose, start):
 		print "Beginning."
 		if use_wget: print "Using wget."
 
-	for i in range(start, last):
+	for i in range(start, last + 1):
 		if verbose: print "Loading url: ", i
 
 		img = open_three_times(i, use_wget, verbose)
