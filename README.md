@@ -12,8 +12,12 @@ Useage:
 **python mine_xkcd.py [path to download] [last_comic_index]**
 
 Optional arguments: --start n (start from the nth comic)
+
 		    --wget (use the wget module for downloading)
+		    
 		    --verbose (print diagnostic information)
+		    
+		    --tries n (make n attempts to download file)
 
 Examples:
 
