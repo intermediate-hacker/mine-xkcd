@@ -9,7 +9,7 @@ import urllib
 import os
 from bs4 import BeautifulSoup
 
-def download_three_times(img, down_path, use_wget, verbose, attempt=0):
+def download_image(img, down_path, use_wget, verbose, max_attempt, attempt=0):
 
 	if verbose: print "Attempt:", attempt
 
@@ -19,8 +19,8 @@ def download_three_times(img, down_path, use_wget, verbose, attempt=0):
 		else:
 			urllib.urlretrieve(img, down_path)
 	except:
-		if attempt < 3:
-			download_three_times(img, down_path, use_wget, verbose, attempt+1)
+		if attempt < max_attempt:
+			download_image(img, down_path, use_wget, verbose, max_attempt, attempt+1)
 			return
 		else:
 			print "Failed."
@@ -28,7 +28,7 @@ def download_three_times(img, down_path, use_wget, verbose, attempt=0):
 
 	print "Downloaded."
 
-def open_three_times(i, use_wget, verbose, attempt = 0):
+def open_url(i, use_wget, verbose, max_attempt, attempt = 0):
 		soup = None
 
 		if verbose: print "Attempt:", attempt
@@ -44,8 +44,8 @@ def open_three_times(i, use_wget, verbose, attempt = 0):
 				f = urllib2.urlopen(url)
 				soup = BeautifulSoup(f.read())
 		except:
-			if attempt < 3:
-				open_three_times(i, soup, use_wget, attempt+1)
+			if attempt < max_attempt:
+				open_url(i, soup, use_wget, max_attempt, attempt+1)
 				return "FAILED"
 			else:
 				if verbose: print "Failed"
@@ -57,7 +57,7 @@ def open_three_times(i, use_wget, verbose, attempt = 0):
 		if verbose: print "Opened url"
 
 
-def extract(path, last, use_wget, verbose, start):
+def extract(path, last, use_wget, verbose, start, max_attempt):
 	if use_wget: import wget
 
 	if verbose:
@@ -67,7 +67,7 @@ def extract(path, last, use_wget, verbose, start):
 	for i in range(start, last + 1):
 		if verbose: print "Loading url: ", i
 
-		img = open_three_times(i, use_wget, verbose)
+		img = open_url(i, use_wget, verbose, max_attempt)
 
 		ext = ".png"
 		if i < 120: ext = ".jpg"
@@ -75,7 +75,7 @@ def extract(path, last, use_wget, verbose, start):
 		down_path = path + "/" + str(i) + ext
 
 		if verbose: print "Downloading: ", i, " to ", down_path
-		download_three_times(img, down_path, use_wget, verbose)
+		download_image(img, down_path, use_wget, verbose, max_attempt)
 
 
 if __name__ == "__main__":
@@ -86,6 +86,7 @@ if __name__ == "__main__":
 		use_wget = False
 		verbose = False
 		start = 1
+		max_attempt = 3
 
 		if "--wget" in sys.argv:
 			use_wget = True
@@ -93,12 +94,23 @@ if __name__ == "__main__":
 		if "--verbose" in sys.argv:
 			verbose = True
 
+		if "--tries" in sys.argv:
+			val_index = sys.argv.index("--tries") + 1
+
+			try: max_attempt = int(sys.argv[val_index])
+			except:
+				print "Syntax error. Use --help. Using default trie value"
+				max_attempt = 3
+
 		if "--start" in sys.argv:
 			val_index = sys.argv.index("--start") + 1
 
 			try: start = int(sys.argv[val_index])
 			except:
 				print "Syntax error. Use --help. Using default start value"
-				start = 1				
+				start = 1		
 
-		extract(sys.argv[1], int(sys.argv[2]), use_wget, verbose, start)
+		if not os.path.exists(sys.argv[1]):
+			os.makedirs(sys.argv[1])		
+
+		extract(sys.argv[1], int(sys.argv[2]), use_wget, verbose, start, max_attempt)
