@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+#! -*- coding: utf-8 -*-
+
+# Author: Muhammad A. Tirmazi
+
 import sys
 import urllib2
 import urllib
